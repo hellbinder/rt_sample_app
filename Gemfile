@@ -1,7 +1,11 @@
+#for rvm
+#ruby=1.9.3
+#ruby-gemset=rails_tutorial
+
 source 'https://rubygems.org'
 
 gem 'rails', '3.2.13'
-
+gem 'haml-rails'
 group :development, :test do
   gem 'sqlite3', '1.3.5'
   gem 'rspec-rails', '2.11.0'
