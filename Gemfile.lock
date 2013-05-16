@@ -78,13 +78,12 @@ GEM
     json (1.8.0)
     libnotify (0.8.0)
       ffi (>= 1.0.11)
-    listen (1.1.0)
+    listen (1.1.1)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
       rb-kqueue (>= 0.2)
     lumberjack (1.0.3)
-    mail (2.5.3)
-      i18n (>= 0.4.0)
+    mail (2.5.4)
       mime-types (~> 1.16)
       treetop (~> 1.4.8)
     method_source (0.8.1)
@@ -151,7 +150,7 @@ GEM
       multi_json (~> 1.0)
       rubyzip
       websocket (~> 1.0.4)
-    slop (3.4.4)
+    slop (3.4.5)
     sprockets (2.2.2)
       hike (~> 1.2)
       multi_json (~> 1.0)
@@ -182,6 +181,7 @@ DEPENDENCIES
   jquery-rails (= 2.0.2)
   libnotify
   pg (= 0.12.2)
+  pry
   rails (= 3.2.13)
   rb-inotify
   rspec-rails (= 2.11.0)
