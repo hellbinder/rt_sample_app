@@ -19,7 +19,7 @@ class User < ActiveRecord::Base
   validates_format_of :email, with: VALID_EMAIL_REGEX
   validates_uniqueness_of :email, case_sensitive: false
   before_save { email.downcase! }
-  
+  before_save :create_remember_token
   ##NEXT COUPLE OF LINES ALSO WORK!
     #before_save :downcase_email
     #def downcase_email
@@ -27,4 +27,10 @@ class User < ActiveRecord::Base
     #end
   ##END
 
+private
+
+  def create_remember_token
+    self.remember_token = SecureRandom.urlsafe_base64
+  end
+  
 end

@@ -137,6 +137,14 @@ haml:scaffold:
 - --old-style-hash
 - --force-plural
 - --form-builder=
+factory_girl:model:
+- --force
+- --pretend
+- --quiet
+- --skip
+- --skip-namespace
+- --old-style-hash
+- --dir=
 coffee:assets:
 - --force
 - --pretend
@@ -387,6 +395,11 @@ js:assets:
 - --skip
 - --skip-namespace
 - --old-style-hash
+annotate_models:install:
+- --force
+- --pretend
+- --quiet
+- --skip
 active_record:migration:
 - --force
 - --pretend
