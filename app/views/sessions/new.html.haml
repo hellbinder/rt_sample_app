@@ -2,14 +2,12 @@
 %h1 Sign in
 .row
   .span6.offset3
-    = form_for(:session, url: sessions_path) do |f|
-      
-      = f.label :email, "Email"
-      = f.text_field :email
+    = form_tag(sessions_path) do 
+      = label_tag :email, "Email"
+      = text_field_tag :email
+      = label_tag :password, "Password"
+      = text_field_tag :password
 
-      = f.label :password, "Password"
-      = f.password_field :password
-
-      = f.submit "Sign in", disable_with: 'Signing in...', class: "btn btn-large btn-primary"
-      
+      = submit_tag "Sign in", id: "submit", name: "submit", class: "btn btn-primary", style: "background-color:#333;", disabled: false, disable_with: "Signing in..."
+    
     %p New user? #{ link_to "Sign up now!", signup_path }
