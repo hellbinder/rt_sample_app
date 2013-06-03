@@ -48,6 +48,7 @@ describe "User Pages" do
       
     end      
   end
+
   describe "profile page" do
     let (:user) { FactoryGirl.create(:user)}
     before {visit user_path(user)}
@@ -86,6 +87,28 @@ describe "User Pages" do
       it { should have_selector("div.alert.alert-success", text: "updated successfully") }
       specify { user.reload.name.should == new_name }
       specify { user.reload.email.should == new_email }
+    end
+  end
+
+  describe "index" do
+    let(:user) { FactoryGirl.create(:user) }
+    before(:each) do
+      signin user
+      visit users_path
+    end
+
+    it { should have_selector("h1", text: "All users") }
+    it { should have_selector("title", text: "All users") }
+    describe "pagination" do
+      before(:all) { 30.times { FactoryGirl.create(:user) } }
+      after (:all) { User.delete_all }
+      it { should have_selector ("div.pagination") }
+
+      it "should list each user" do
+        User.page(1) .each do |user|
+          page.should have_selector("li", text: user.name)
+        end
+      end
     end
   end
 end

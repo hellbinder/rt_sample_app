@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
     if user && user.authenticate(params[:password])
       #Sign in user and redirect to his profile (user's show)
       sign_in user
-      redirect_to user
+      redirect_back_or user
     else
       # Create error message and return to sign in page
       #flash.now = specifically designed for displaying flash messages on rendered pages

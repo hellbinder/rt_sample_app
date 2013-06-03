@@ -1,6 +1,12 @@
 class UsersController < ApplicationController
   before_filter :get_user, only: [:show, :edit, :update]
-  before_filter :signed_in_user, only: [:edit, :update]
+  before_filter :signed_in_user, only: [:index, :edit, :update]
+  before_filter :correct_user, only: [:edit, :update]
+
+  def index
+    @users = User.page(params[:page] || 1).limit(10)
+  end
+
   def new
     @user = User.new
   end
@@ -21,7 +27,7 @@ class UsersController < ApplicationController
   end
 
   def edit
-    
+
   end
 
   def update
@@ -36,11 +42,21 @@ class UsersController < ApplicationController
     end
   end
 
+private
+
   def get_user
     @user = User.find(params[:id])
   end
 
   def signed_in_user
-    redirect_to signin_url, notice: "Please sign in" unless signed_in?
+    unless signed_in?
+      store_location #Stores request url in session so the user can go back when logged back in.
+      redirect_to signin_url, notice: "Please sign in" 
+    end
   end
+
+  def correct_user
+    redirect_to root_path unless current_user?(@user)
+  end
+
 end
