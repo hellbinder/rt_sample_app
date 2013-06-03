@@ -99,14 +99,44 @@ describe "User Pages" do
 
     it { should have_selector("h1", text: "All users") }
     it { should have_selector("title", text: "All users") }
+
     describe "pagination" do
       before(:all) { 30.times { FactoryGirl.create(:user) } }
       after (:all) { User.delete_all }
       it { should have_selector ("div.pagination") }
 
       it "should list each user" do
-        User.page(1) .each do |user|
+        User.page(1).each do |user|
           page.should have_selector("li", text: user.name)
+        end
+      end
+    end
+
+    describe "delete links" do
+      it { should_not have_link("delete") } 
+
+      describe "as an admin user" do
+        let(:admin) { FactoryGirl.create(:admin) }
+        before do
+          signin admin
+          visit users_path
+        end
+        it { should have_link('delete', href: user_path(User.first)) }
+        it "should be able to delete another user" do
+          expect { click_link('delete') }.to change(User, :count).by(-1)
+        end
+        it { should_not have_link('delete', href: user_path(admin)) }
+      end
+
+      describe "as non-admin user" do
+          let(:user) { FactoryGirl.create(:user) }
+          let(:non_admin) { FactoryGirl.create(:user) }
+
+          before { signin non_admin }
+
+        describe "submitting a DELETE request to the Users#destroy action" do
+          before { delete user_path(user) }
+          specify { response.should redirect_to(root_url) }
         end
       end
     end

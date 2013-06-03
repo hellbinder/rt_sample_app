@@ -17,6 +17,7 @@ describe User do
   subject { @user }
   it { should respond_to(:name) }
   it { should respond_to(:email) }
+  it { should respond_to(:admin) }
   it { should respond_to(:remember_token) } #since its using cookies (not sessions) to remember user
   it { should respond_to(:password_digest) }
   it { should respond_to(:password) }
@@ -24,7 +25,18 @@ describe User do
   it { should respond_to(:authenticate) }
 
   it { should be_valid }
-  
+  it { should_not be_admin }
+
+#make sure that it's admin when toggled.
+  describe "with admin attribute set to 'true'" do
+    before do
+      @user.save!
+      @user.toggle!(:admin)
+    end
+
+    it { should be_admin } #implies (via the RSpec boolean convention) that the user should have an admin? boolean method.
+  end
+
   describe "remember token" do
     before {@user.save}
     its(:remember_token) { should_not be_blank }
