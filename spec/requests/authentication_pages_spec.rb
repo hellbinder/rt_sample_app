@@ -3,16 +3,23 @@ require 'spec_helper'
 describe "Authentication" do
   subject { page }
 
-  describe "sign in page" do    
+  describe "sign in page" do  
     before { visit signin_path }
     it { should have_selector("h1", text: "Sign in") }
     it { should have_selector("title", text: "Sign in") }
   end
 
   describe "signin" do
+    describe "user not signedin" do
+      let(:user) {  FactoryGirl.create(:user) }  
+      before { visit signin_path }
+       #make sure user is signed out
+      it { should_not have_link("Profile") }
+      it { should_not have_link("Settings") }
+    end
     describe "with valid information" do
       let (:user) { FactoryGirl.create(:user)}
-      before { signin user }
+      before { sign_in user }
       it { should have_selector("title", text: user.name) }
       it { should have_link("Profile", href: user_path(user)) }
       it { should have_link("Settings", href: edit_user_path(user)) }
@@ -55,10 +62,26 @@ describe "Authentication" do
         end
 
         describe "after signing in" do
-          it { should have_selector('title', text: full_title('Edit User')) }
-        end
+          
+          describe "it should be on desired protected page" do
+            it { should have_selector('title', text: full_title('Edit User')) }
+          end
 
+          describe "when signing in again" do
+            before do
+              delete signout_path
+              visit signin_path
+              fill_in "Email", with: user.email
+              fill_in "Password", with: user.password
+              click_button "Sign in"
+            end
+
+            it "should render the default page (profile)" do
+              page.should have_selector("title", text: user.name)
+            end
+        end
       end
+    end
 
       describe "in the Users controller" do
 
@@ -81,7 +104,7 @@ describe "Authentication" do
       describe "as a wrong user" do
         let(:user) { FactoryGirl.create(:user) }
         let (:wrong_user) { FactoryGirl.create(:user, email: "wrong@example.com") }
-        before { signin user }
+        before { sign_in user }
 
         describe "visiting Users#edit page" do
           before { visit edit_user_path(wrong_user) }

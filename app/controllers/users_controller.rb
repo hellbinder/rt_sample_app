@@ -5,11 +5,12 @@ class UsersController < ApplicationController
   before_filter :admin_user, only: [:destroy]
 
   def index
-    @users = User.page(params[:page] || 1)
+    @users = User.page(params[:page] || 1).limit(10)
   end
 
   def new
-    @user = User.new
+    redirect_to root_url if signed_in?
+     @user = User.new
   end
 
   def show
@@ -17,18 +18,21 @@ class UsersController < ApplicationController
   end
 
   def create
-    @user = User.new(params[:user])
-    if @user.save
-      flash[:success] = "Welcome to the sample application #{@user.name}"
-      sign_in @user
-      redirect_to @user
+    if signed_in?
+      redirect_to root_url
     else
-      render 'new'
+      @user = User.new(params[:user])
+      if @user.save
+        flash[:success] = "Welcome to the sample application #{@user.name}"
+        sign_in @user
+        redirect_to @user
+      else
+        render 'new'
+      end
     end
   end
 
   def edit
-
   end
 
   def update

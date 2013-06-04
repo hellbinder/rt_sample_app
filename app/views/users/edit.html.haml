@@ -4,23 +4,9 @@
   .span6.offset3
     = form_for @user do |f|
       = render 'shared/error_messages'
-
-      = f.label :name, "Name"
-      = f.text_field :name
-
-      = f.label :email, "Email"
-      = f.text_field :email
-
-      = f.label :password, "Password"
-      = f.password_field :password
-
-      = f.label :password_confirmation, "Confirm Password"
-      = f.password_field :password_confirmation
-
-      = f.submit "Save changes", disable_with: 'Saving...', class: "btn-large btn-primary"
-
+      = render partial: "form_fields", locals: { f: f, text: "Save changes", disabled_text: "Saving..."}
     = gravatar_for @user
-    = link_to("change", "http://www.gravatar.com/emails")
+    = link_to("change", "http://www.gravatar.com/emails", target: "_blank")
 
 
   

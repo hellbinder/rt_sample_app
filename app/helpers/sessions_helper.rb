@@ -31,7 +31,7 @@ module SessionsHelper
 
   def redirect_back_or(default)
     redirect_to(session[:return_to] || default)
-    session.delete(:return_to) #careful to remove the forwarding URI; otherwise, 
+    #session.delete(:return_to) #careful to remove the forwarding URI; otherwise, 
     #subsequent signin attempts would forward to the protected page until the user closed his browser
   end
 end

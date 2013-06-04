@@ -8,6 +8,16 @@ describe "User Pages" do
 
     it { should have_selector('h1', text: 'Sign Up') }
     it { should have_selector('title', text: full_title('Sign up')) }
+
+    describe "already signed in" do
+      let(:user) { FactoryGirl.create :user }
+      before do
+       sign_in user
+       visit new_user_path
+      end
+
+      it { should have_selector('h1', text: 'Welcome') }
+    end  
   end
 
   describe "signup" do
@@ -45,8 +55,25 @@ describe "User Pages" do
         it { should_not have_link("Sign in", href: signin_path) }
         it { should have_success_message('Welcome') } #since when signing up should already log them in.
       end
+    end     
+
+    describe "already logged in" do
       
-    end      
+      describe "attempting to request a user#create " do
+        let(:user) { FactoryGirl.create :user }
+        before do
+         sign_in user
+         visit new_user_path
+         post users_path
+        end
+
+        specify { response.should redirect_to(root_url) }
+        #t { should have_selector('h1', text: 'Welcome') }
+      end 
+
+    end
+
+
   end
 
   describe "profile page" do
@@ -59,7 +86,7 @@ describe "User Pages" do
   describe "edit" do
     let(:user) { FactoryGirl.create(:user) }
     before do
-     signin user
+     sign_in user
      visit edit_user_path(user) 
     end
 
@@ -93,7 +120,7 @@ describe "User Pages" do
   describe "index" do
     let(:user) { FactoryGirl.create(:user) }
     before(:each) do
-      signin user
+      sign_in user
       visit users_path
     end
 
@@ -106,7 +133,7 @@ describe "User Pages" do
       it { should have_selector ("div.pagination") }
 
       it "should list each user" do
-        User.page(1).each do |user|
+        User.page(1).limit(10).each do |user|
           page.should have_selector("li", text: user.name)
         end
       end
@@ -118,7 +145,7 @@ describe "User Pages" do
       describe "as an admin user" do
         let(:admin) { FactoryGirl.create(:admin) }
         before do
-          signin admin
+          sign_in admin
           visit users_path
         end
         it { should have_link('delete', href: user_path(User.first)) }
@@ -132,7 +159,7 @@ describe "User Pages" do
           let(:user) { FactoryGirl.create(:user) }
           let(:non_admin) { FactoryGirl.create(:user) }
 
-          before { signin non_admin }
+          before { sign_in non_admin }
 
         describe "submitting a DELETE request to the Users#destroy action" do
           before { delete user_path(user) }

@@ -1,7 +1,7 @@
 ##Created module as in excercise 8.5.2 
 #Example on how to add the helper in the config is in the spec_helper file
 module Helper
-  def signin(user)
+  def sign_in(user)
   visit signin_path
   fill_in "Email",    with: user.email
   fill_in "Password", with: user.password
