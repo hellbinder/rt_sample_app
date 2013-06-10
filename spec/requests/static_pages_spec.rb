@@ -16,6 +16,41 @@ describe "Static pages" do
 
     it_should_behave_like "all static pages"
     it { should_not have_selector 'title', text: '| Home' }
+
+
+    describe "for signed-in users" do
+      let(:user) { FactoryGirl.create(:user) }
+      before do
+        FactoryGirl.create(:micropost, user: user, content: "Lorem ipsum")
+        FactoryGirl.create(:micropost, user: user, content: "Dolor sit amet")
+        sign_in user
+        visit root_path
+      end
+
+      describe "micropost header count" do
+
+        it "should have header pluralized" do
+          page.should have_selector("span", text: "microposts")
+        end
+
+        describe "singular post" do
+          before do
+            user.microposts.first.destroy
+            visit root_url
+          end
+          it "should have header singular" do
+            page.should have_selector("span", text: "micropost")
+          end
+        end
+      end
+
+      it "should render the user's feed" do
+        user.feed.each do |item|
+          page.should have_selector("li##{item.id}", text: item.content)
+          page.should have_link("delete", href: micropost_path(item) )
+        end
+      end
+    end
   end
 
   describe "Help page" do

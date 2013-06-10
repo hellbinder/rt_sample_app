@@ -1,8 +1,25 @@
-.center.hero-unit
-  %h1 Welcome to the Sample App
-  %h2
-    This is the home page for the
-    %a{:href => "http://railstutorial.org/"} Ruby on Rails Tutorial
-    sample application.
-  = link_to "Sign up now!", signup_path, class: "btn btn-large btn-primary"
+//EXCERCISE..Still trying to see best way to run js in one single page..
+//Can be added manuallly but will then blwo up in productio bc it's not a part of the asset pipeline.
+:javascript
+  var max_val;
+  $(function(){
+    max_val = $('#counter').html();
+    GetRemainingCharacters();
+    $('#micropost_content').keyup(function(){
+      GetRemainingCharacters();
+    });
+  });
+
+  function GetRemainingCharacters()
+  {
+      var current_length = $('#micropost_content').val().length;
+      var remaining_chars = max_val - current_length;
+      $('#counter').html(remaining_chars);
+  }
+
+//Shows home page with different information depening on user being signed in.
+-if signed_in?
+  = render 'static_pages/signed_in'
+-else
+  = render 'static_pages/not_signed_in'
 = link_to image_tag("rails.png", alt: "Rails"), 'http://rubyonrails.org/'

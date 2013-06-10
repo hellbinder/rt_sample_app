@@ -1,0 +1,1 @@
+= link_to "delete", micropost, method: :delete , data: { confirm: "You sure?", title: micropost.content } if micropost.user.id == current_user.id

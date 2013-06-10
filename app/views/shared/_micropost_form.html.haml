@@ -1,0 +1,6 @@
+= form_for @micropost do |f|
+  = render "shared/error_messages", object: f.object
+  .field
+    = f.text_area :content, placeholder: "Compose new micropost..."
+    %p#counter.text-right= Micropost.validators_on(:content)[1].options[:maximum]
+    = f.submit "Post", disable_with: 'Posting...', class: "btn btn-large btn-primary"

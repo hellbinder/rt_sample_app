@@ -20,6 +20,13 @@ module SessionsHelper
     !current_user.nil?
   end
 
+  def signed_in_user
+    unless signed_in?
+      store_location #Stores request url in session so the user can go back when logged back in.
+      redirect_to signin_url, notice: "Please sign in" 
+    end
+  end
+  
   def sign_out
     self.current_user = nil
     cookies.delete(:remember_token)
@@ -31,7 +38,7 @@ module SessionsHelper
 
   def redirect_back_or(default)
     redirect_to(session[:return_to] || default)
-    #session.delete(:return_to) #careful to remove the forwarding URI; otherwise, 
+    session.delete(:return_to) #careful to remove the forwarding URI; otherwise, 
     #subsequent signin attempts would forward to the protected page until the user closed his browser
   end
 end

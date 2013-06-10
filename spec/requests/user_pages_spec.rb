@@ -16,7 +16,7 @@ describe "User Pages" do
        visit new_user_path
       end
 
-      it { should have_selector('h1', text: 'Welcome') }
+      it { should have_selector('h1', text: user.name) }
     end  
   end
 
@@ -73,14 +73,47 @@ describe "User Pages" do
 
     end
 
-
   end
 
   describe "profile page" do
     let (:user) { FactoryGirl.create(:user)}
-    before {visit user_path(user)}
+    let!(:m1) { FactoryGirl.create(:micropost, user: user, created_at: 1.day.ago) }
+    let!(:m2) { FactoryGirl.create(:micropost, user: user, content: "Oh hell not", created_at: 1.hour.ago) }
+
+    before do
+      sign_in user
+      visit user_path(user)
+    end
+
     it { should have_selector('h1', text: user.name) }
-    it { should have_selector('title', text: user.name) }  
+    it { should have_selector('title', text: user.name) } 
+    
+    it "should not see the delete link for each micropost" do
+      user.microposts.each do |item|
+        page.should have_selector("li", text: item.content)
+        page.should have_link("delete", href: micropost_path(item) )
+      end
+    end
+
+    #This was extra excercise. I wasn't able to create a test without setting up everything again.
+    describe "visit another user's profile" do
+      let(:user) { FactoryGirl.create :user }
+      let(:other_user) { FactoryGirl.create :user, email: "other_user@example.com" }
+      let!(:m1) { FactoryGirl.create(:micropost, user: other_user, created_at: 1.day.ago) }
+      let!(:m2) { FactoryGirl.create(:micropost, user: other_user, content: "Oh hell not", created_at: 1.hour.ago) }
+
+      before do
+        sign_in user
+        visit user_path(other_user)
+      end
+
+      it "should not see the delete link for each micropost" do
+        other_user.microposts.each do |item|
+          page.should have_selector("li", text: item.content)
+          page.should_not have_link("delete", href: micropost_path(item) )
+        end
+      end
+    end
   end
 
   describe "edit" do

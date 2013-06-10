@@ -145,6 +145,13 @@ factory_girl:model:
 - --skip-namespace
 - --old-style-hash
 - --dir=
+cucumber:install:
+- --force
+- --pretend
+- --quiet
+- --skip
+- --spork
+- --skip-database
 coffee:assets:
 - --force
 - --pretend

@@ -14,7 +14,7 @@ class UsersController < ApplicationController
   end
 
   def show
-    
+    @microposts = @user.microposts.page(params[:page] || 1)
   end
 
   def create
@@ -62,13 +62,6 @@ private
 
   def get_user
     @user = User.find(params[:id])
-  end
-
-  def signed_in_user
-    unless signed_in?
-      store_location #Stores request url in session so the user can go back when logged back in.
-      redirect_to signin_url, notice: "Please sign in" 
-    end
   end
 
   def correct_user

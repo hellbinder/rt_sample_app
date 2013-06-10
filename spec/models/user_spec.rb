@@ -23,6 +23,8 @@ describe User do
   it { should respond_to(:password) }
   it { should respond_to(:password_confirmation) }
   it { should respond_to(:authenticate) }
+  it { should respond_to(:microposts) }
+  it { should respond_to(:feed) }
   it { should_not allow_mass_assignment_of(:admin) }
 
   it { should be_valid }
@@ -49,7 +51,7 @@ describe User do
     let(:found_user) { User.find_by_email(@user.email) }
 
     describe "with valid password" do
-      it {should == found_user.authenticate(@user.password)}
+      it { should == found_user.authenticate(@user.password) }
     end
 
     describe "with invalid password" do
@@ -151,4 +153,34 @@ describe User do
       @user.reload.email.should == mixed_case_email.downcase
     end
   end
+
+  describe "micropost associations" do
+    before { @user.save }  
+    let!(:older_micropost) { FactoryGirl.create(:micropost, user: @user, created_at: 1.day.ago) }
+    let!(:newer_micropost) { FactoryGirl.create(:micropost, user: @user, created_at: 1.hour.ago) }
+
+    it "should have the right microposts in the right order" do
+      #@user.microposts.should == [newer_micropost, older_micropost] #testing order by using array.
+      #I think the following can also be user
+      @user.microposts.index(newer_micropost).should == 0
+    end
+
+    it "destroy associated microposts" do
+      microposts = @user.microposts.dup
+      @user.destroy
+      microposts.should_not be_empty #make sure dup is used
+      microposts.each do |mp|
+        Micropost.all.should_not include mp
+      end
+    end
+
+    describe "status" do
+      let(:unfollowed_post) { FactoryGirl.create(:micropost, user: FactoryGirl.create(:user)) }
+
+      its(:feed) { should include(newer_micropost) }
+      its(:feed) { should include(older_micropost) }
+      its(:feed) { should_not include(unfollowed_post) }      
+    end
+  end
+
 end
