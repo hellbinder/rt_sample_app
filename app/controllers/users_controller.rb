@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
-  before_filter :get_user, only: [:show, :edit, :update, :destroy]
-  before_filter :signed_in_user, only: [:index, :edit, :update]
+  before_filter :get_user, only: [:show, :edit, :update, :destroy, :following, :followers]
+  before_filter :signed_in_user, only: [:index, :edit, :update, :followers, :following]
   before_filter :correct_user, only: [:edit, :update]
   before_filter :admin_user, only: [:destroy]
 
@@ -58,6 +58,17 @@ class UsersController < ApplicationController
     end
   end
 
+  def following
+    @title = "Following"
+    @users = @user.followed_users.page(params[:page] || 1)
+    render "show_follow"
+  end
+
+  def followers
+    @title = "Followers"
+    @users = @user.followers.page(params[:page] || 1)
+    render "show_follow"
+  end
 private
 
   def get_user

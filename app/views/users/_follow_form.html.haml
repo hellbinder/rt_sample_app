@@ -1,0 +1,6 @@
+-unless current_user?(@user) #Show the follow/unfollow info if the page is someone elses (not the currently logged in user)
+  #follow_form
+    -if current_user.following?(@user) #if the current user is following the profile user
+      = render "unfollow"
+    -else
+      = render "follow"
