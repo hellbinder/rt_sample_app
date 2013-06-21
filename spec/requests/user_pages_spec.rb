@@ -84,7 +84,6 @@ describe "User Pages" do
 
     before do
       sign_in user
-      user.relationships.create(followed_id: other_user.id) # add follower
       visit user_path(user)
     end
 
@@ -99,6 +98,10 @@ describe "User Pages" do
     end
 
     describe "user stats" do
+      before do
+        user.relationships.create(followed_id: other_user.id) # add follower
+        visit user_path(user)
+      end
       it { should have_link("1 following", href: following_user_path(user)) }
       it { should have_link("0 follower", href: followers_user_path(user)) }
     end
