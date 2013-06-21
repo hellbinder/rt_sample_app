@@ -37,6 +37,7 @@ describe "User Pages" do
     end
 
     end
+    
     describe "with valid information" do
       before do
         valid_signup

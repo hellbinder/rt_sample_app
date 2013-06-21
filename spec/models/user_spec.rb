@@ -167,7 +167,7 @@ describe User do
 
     it "should have the right microposts in the right order" do
       #@user.microposts.should == [newer_micropost, older_micropost] #testing order by using array.
-      #I think the following can also be user
+      #I think the following can also be used
       @user.microposts.index(newer_micropost).should == 0
     end
 
@@ -182,10 +182,22 @@ describe User do
 
     describe "status" do
       let(:unfollowed_post) { FactoryGirl.create(:micropost, user: FactoryGirl.create(:user)) }
+      let(:followed_user) { FactoryGirl.create :user }
+
+      before do
+        @user.follow!(followed_user)
+        3.times { followed_user.microposts.create!(content: "This is a test")}
+      end
 
       its(:feed) { should include(newer_micropost) }
       its(:feed) { should include(older_micropost) }
-      its(:feed) { should_not include(unfollowed_post) }      
+      its(:feed) { should_not include(unfollowed_post) }
+      #the followed users micropost should also appear
+      its(:feed) do
+        followed_user.microposts.each do |micropost|
+          should include(micropost)
+        end
+      end
     end
   end
 
