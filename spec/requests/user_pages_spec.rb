@@ -78,11 +78,13 @@ describe "User Pages" do
 
   describe "profile page" do
     let (:user) { FactoryGirl.create(:user)}
+    let (:other_user) { FactoryGirl.create(:user)}
     let!(:m1) { FactoryGirl.create(:micropost, user: user, created_at: 1.day.ago) }
     let!(:m2) { FactoryGirl.create(:micropost, user: user, content: "Oh hell not", created_at: 1.hour.ago) }
 
     before do
       sign_in user
+      user.relationships.create(followed_id: other_user.id) # add follower
       visit user_path(user)
     end
 
@@ -94,6 +96,11 @@ describe "User Pages" do
         page.should have_selector("li", text: item.content)
         page.should have_link("delete", href: micropost_path(item) )
       end
+    end
+
+    describe "user stats" do
+      it { should have_link("1 following", href: following_user_path(user)) }
+      it { should have_link("0 follower", href: followers_user_path(user)) }
     end
 
     #This was extra excercise. I wasn't able to create a test without setting up everything again.

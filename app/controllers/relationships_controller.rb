@@ -1,12 +1,10 @@
 class RelationshipsController < ApplicationController
+  respond_to :html, :js
   before_filter :signed_in_user #make sure that a user it's signed in
   def create
     @user = User.find(params[:relationship][:followed_id])
     current_user.follow!(@user)
-    respond_to do |format|
-      format.html { redirect_to(@user) }
-      format.js
-    end
+    respond_with @user
   end
 
   def destroy
@@ -16,10 +14,8 @@ class RelationshipsController < ApplicationController
 
     @user = Relationship.find(params[:id]).followed
     current_user.unfollow!(@user)
-    respond_to do |format|
-      format.html { redirect_to(@user) }
-      format.js
-    end
+    respond_with @user
+    
   end
 
 end
