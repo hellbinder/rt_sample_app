@@ -9,17 +9,23 @@ namespace :db do
   def make_users
     admin = User.create!(name: "Miguel Martorell",
                  email: "miguel_1216@yahoo.com",
+                 username:"mmartorell",
                  password: "foobar",
                  password_confirmation: "foobar")
     admin.toggle!(:admin)
     99.times do |n|
       name  = Faker::Name.name
-      email = "example-#{n+1}@railstutorial.org"
-      password  = "password"
-     created_user = User.create!(name: name,
-                   email: email,
-                   password: password,
-                   password_confirmation: password)
+      nameSplit = name.split()
+      username = nameSplit[0][0].downcase + nameSplit[1].downcase
+      if username.length > 5
+        email = "example-#{n+1}@railstutorial.org"
+        password  = "password"
+        created_user = User.create!(name: name,
+                     email: email,
+                     username: username,
+                     password: password,
+                     password_confirmation: password)
+      end
     end
   end
 

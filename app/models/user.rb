@@ -13,8 +13,9 @@
 #
 
 class User < ActiveRecord::Base
-  attr_accessible :email, :name, :password, :password_confirmation
-  validates_presence_of :name, :email, :password_confirmation
+  attr_accessible :email, :name, :password, :password_confirmation, :username
+  validates_presence_of :name, :username, :email, :password_confirmation # if i take user name off, still apsses presence test.
+  validates_length_of :username, maximum: 15, minimum: 6
   validates_length_of :name, maximum: 50
   validates_length_of :password, minimum: 6
   has_secure_password #rails password module. Must include password_digest column

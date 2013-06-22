@@ -90,10 +90,11 @@ describe "User Pages" do
     it { should have_selector('h1', text: user.name) }
     it { should have_selector('title', text: user.name) } 
     
-    it "should not see the delete link for each micropost" do
+    it "should see the delete link - should not see reply for each micropost" do
       user.microposts.each do |item|
         page.should have_selector("li", text: item.content)
         page.should have_link("delete", href: micropost_path(item) )
+        page.should_not have_link("reply")
       end
     end
 
@@ -118,10 +119,11 @@ describe "User Pages" do
         visit user_path(other_user)
       end
 
-      it "should not see the delete link for each micropost" do
+      it "should not see the delete link and should see reply for each micropost" do
         other_user.microposts.each do |item|
           page.should have_selector("li", text: item.content)
           page.should_not have_link("delete", href: micropost_path(item) )
+          page.should have_link("reply")
         end
       end
     end
