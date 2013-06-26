@@ -6,3 +6,15 @@
   %span.timestamp
     Posted #{time_ago_in_words(feed_item.created_at)} ago.
     = render partial: "shared/feed_options", locals: { micropost: feed_item }
+    /replies
+    -unless feed_item.replies.empty?
+      %ol{:class => "replies"}
+        -feed_item.replies.each do |reply|
+          %li{id: reply.id}
+            = link_to gravatar_for(reply.user), reply.user
+            %span.user
+              = link_to reply.user.name, reply.user
+            %span.content= wrap("#{ link_to feed_item.user.reply_username, feed_item.user } lalala" )
+            %span.timestamp
+              Posted #{time_ago_in_words(reply.created_at)} ago.
+        

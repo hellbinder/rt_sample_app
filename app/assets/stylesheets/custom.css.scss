@@ -217,7 +217,11 @@ input {
   }
 }
 /* microposts */
-
+.replies
+{
+  list-style: none;
+  margin: 10px 0 0 40px;
+}
 .microposts {
   list-style: none;
   margin: 10px 0 0 0;
@@ -230,6 +234,11 @@ input {
       display:inline;
     }
   }
+}
+
+#micropost_content
+{
+  max-height: 180px;
 }
 .content {
   display: block;

@@ -81,6 +81,7 @@ describe "User Pages" do
     let (:other_user) { FactoryGirl.create(:user)}
     let!(:m1) { FactoryGirl.create(:micropost, user: user, created_at: 1.day.ago) }
     let!(:m2) { FactoryGirl.create(:micropost, user: user, content: "Oh hell not", created_at: 1.hour.ago) }
+    let!(:m3) { FactoryGirl.create(:micropost, user: user, content: "reply to yo mother!", in_reply_to: m2.id, created_at: 2.hour.ago) }
 
     before do
       sign_in user
@@ -92,7 +93,11 @@ describe "User Pages" do
     
     it "should see the delete link - should not see reply for each micropost" do
       user.microposts.each do |item|
-        page.should have_selector("li", text: item.content)
+        if item.in_reply_to.nil?
+          page.should have_selector("li", text: item.content)
+        else
+          page.should have_selector("li.reply", text: item.content)
+        end
         page.should have_link("delete", href: micropost_path(item) )
         page.should_not have_link("reply")
       end

@@ -1,0 +1,3 @@
+.feed_options
+  = render partial: "shared/delete_micropost", locals: { micropost: micropost }
+  = link_to("reply", "javascript:void(0)", class:"reply_to", data: { username: micropost.user.username }) unless micropost.user_id == current_user.id

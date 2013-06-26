@@ -11,13 +11,17 @@
 
 class Micropost < ActiveRecord::Base
 
-  attr_accessible :content #user id should not be accessible. prone to malicious attacks
+  attr_accessible :content, :in_reply_to #user id should not be accessible. prone to malicious attacks
   validates_presence_of :user_id, message: "User can't be blank"
   validates_presence_of :content
   validates_length_of :content, maximum: 140, message: "Maximum of 140 characters is allowed"
   belongs_to :user
   default_scope order: "microposts.created_at DESC"
 
+
+  def replies
+    Micropost.where("in_reply_to = ?", self.id)
+  end
 
   #Notice the self meaning it's a static from the main class. Not an instance
   def self.from_users_followed_by(user)
@@ -28,7 +32,9 @@ class Micropost < ActiveRecord::Base
     #UPDATED VERSION
     followed_user_ids = "SELECT followed_id from relationships
                          WHERE follower_id = :user_id"
-    where("user_id IN (#{followed_user_ids}) or user_id = :user_id", 
+    including_replies = ""
+    where("(user_id IN (#{followed_user_ids}) or user_id = :user_id) AND in_reply_to is null", 
           user_id: user)
   end
+
 end

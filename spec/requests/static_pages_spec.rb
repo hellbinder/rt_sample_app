@@ -20,9 +20,11 @@ describe "Static pages" do
 
     describe "for signed-in users" do
       let(:user) { FactoryGirl.create(:user) }
+      let(:other_user) { FactoryGirl.create(:user) }
+      let!(:m1) { FactoryGirl.create(:micropost, user: user, content: "Dolor sit amet") }
+      let!(:micropost_reply) { FactoryGirl.create :micropost, user: other_user, in_reply_to: m1.id, content: "reply of this other post" }
       before do
         FactoryGirl.create(:micropost, user: user, content: "Lorem ipsum")
-        FactoryGirl.create(:micropost, user: user, content: "Dolor sit amet")
         sign_in user
         visit root_path
       end
@@ -48,6 +50,13 @@ describe "Static pages" do
         user.feed.each do |item|
           page.should have_selector("li##{item.id}", text: item.content)
           page.should have_link("delete", href: micropost_path(item) )
+        end
+      end
+
+      it "should render the micropost reply" do
+        print m1.replies.count
+        m1.replies.each do |reply|
+          page.should have_selector("span.content", text: "#{reply.content}")
         end
       end
 

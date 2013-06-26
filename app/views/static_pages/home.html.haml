@@ -5,7 +5,7 @@
   $(function(){
     max_val = $('#counter').html();
     GetRemainingCharacters();
-    $('#micropost_content').keyup(function(){
+    $('#micropost_content').live("keyup", function(){
       GetRemainingCharacters();
     });
   });

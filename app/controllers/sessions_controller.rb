@@ -4,7 +4,7 @@ class SessionsController < ApplicationController
   end
 
   def create
-    user = User.find_by_email(params[:email].downcase)
+    user = User.find_by_username(params[:email].downcase) || User.find_by_email(params[:email].downcase)
     if user && user.authenticate(params[:password])
       #Sign in user and redirect to his profile (user's show)
       sign_in user
@@ -15,7 +15,6 @@ class SessionsController < ApplicationController
       flash.now[:error] = 'Invalid email/password combination'
       render "new"
       # since it's a redirect it won't count as another request so flash messages will stay for the next render.
-      #we use flash.now, which is specifically designed for displaying flash messages on rendered pages
     end
   end
 
