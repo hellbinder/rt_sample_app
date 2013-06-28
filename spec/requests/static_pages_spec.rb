@@ -56,7 +56,8 @@ describe "Static pages" do
       it "should render the micropost reply" do
         print m1.replies.count
         m1.replies.each do |reply|
-          page.should have_selector("span.content", text: "#{reply.content}")
+          # HOW DO I TEST THE LINK WITH THE STRING INTSELF!...
+          page.should have_selector("li##{reply.id}", text: reply.content)
         end
       end
 

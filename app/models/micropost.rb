@@ -16,12 +16,8 @@ class Micropost < ActiveRecord::Base
   validates_presence_of :content
   validates_length_of :content, maximum: 140, message: "Maximum of 140 characters is allowed"
   belongs_to :user
+  has_many :replies, class_name: "Micropost", foreign_key: "in_reply_to", dependent: :destroy
   default_scope order: "microposts.created_at DESC"
-
-
-  def replies
-    Micropost.where("in_reply_to = ?", self.id)
-  end
 
   #Notice the self meaning it's a static from the main class. Not an instance
   def self.from_users_followed_by(user)

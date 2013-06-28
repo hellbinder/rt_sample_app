@@ -5,6 +5,7 @@ describe "Micropost pages" do
   subject { page }
 
   let(:user) { FactoryGirl.create(:user) }
+  let(:other_user) { FactoryGirl.create(:user) }
   before { sign_in user }
 
   describe "micropost creation" do
@@ -32,12 +33,16 @@ describe "Micropost pages" do
   end
 
   describe "micropost destruction" do
-    before { FactoryGirl.create :micropost, user: user }
+    before do 
+      m1 = FactoryGirl.create :micropost, user: user 
+      r1 = FactoryGirl.create :micropost, user: other_user, in_reply_to: m1.id
+      r2 = FactoryGirl.create :micropost, user: other_user, in_reply_to: m1.id
+    end
 
     describe "as a correct user" do
       before { visit root_path }
       it "should delete a micropost" do
-        expect{ click_link "delete" }.to change(Micropost, :count).by(-1)
+        expect{ click_link "delete" }.to change(Micropost, :count).by(-2) #should delete replies.
       end
     end
   end

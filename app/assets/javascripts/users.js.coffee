@@ -12,7 +12,7 @@ $ ->
               </div>
             </form>'
   $("a.reply_to").click (s) ->
-    $("form.reply_micropost").remove()
+    $("form#reply_micropost").remove()
     console.log $(this).closest("li").attr("id")
     $(this).closest("li").append(a)
     mp_id = $(this).closest("li").attr("id")

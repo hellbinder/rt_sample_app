@@ -11,10 +11,10 @@
       %ol{:class => "replies"}
         -feed_item.replies.each do |reply|
           %li{id: reply.id}
-            = link_to gravatar_for(reply.user), reply.user
+            = link_to gravatar_for(reply.user, size:30), reply.user
             %span.user
               = link_to reply.user.name, reply.user
-            %span.content= wrap("#{ link_to feed_item.user.reply_username, feed_item.user } lalala" )
+            %span.content #{link_to feed_item.user.reply_username, feed_item.user} #{reply.content}
             %span.timestamp
               Posted #{time_ago_in_words(reply.created_at)} ago.
         
