@@ -81,7 +81,7 @@ describe "User Pages" do
     let (:other_user) { FactoryGirl.create(:user)}
     let!(:m1) { FactoryGirl.create(:micropost, user: user, created_at: 1.day.ago) }
     let!(:m2) { FactoryGirl.create(:micropost, user: user, content: "Oh hell not", created_at: 1.hour.ago) }
-    let!(:m3) { FactoryGirl.create(:micropost, user: user, content: "reply to yo mother!", in_reply_to: m2.id, created_at: 2.hour.ago) }
+    let!(:m3) { FactoryGirl.create(:micropost, user: other_user, content: "reply to yo mother!", in_reply_to: m2.id, created_at: 2.hour.ago) }
 
     before do
       sign_in user

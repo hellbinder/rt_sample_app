@@ -12,6 +12,7 @@ module Helper
 
   def valid_signup
     fill_in "Name", with: "Example User"
+    fill_in "Username", with: "mmartorell"
     fill_in "Email", with: "mmart@example.com"
     fill_in "Password", with: "foobar"
     fill_in "Confirm Password", with: "foobar"
