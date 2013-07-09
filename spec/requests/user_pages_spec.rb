@@ -45,6 +45,7 @@ describe "User Pages" do
       it "should create a user" do
         expect { click_button submit }.to change(User, :count).by(1)
       end
+      
 
       describe "after saving the user" do
         before { click_button submit }
@@ -55,6 +56,13 @@ describe "User Pages" do
         it { should have_link("Sign out", href: signout_path) }
         it { should_not have_link("Sign in", href: signin_path) }
         it { should have_success_message('Welcome') } #since when signing up should already log them in.
+        
+        it "should send an e-mail" do
+          mail = ActionMailer::Base.deliveries.last
+          puts mail
+          mail.to.should == [user.email]
+        end
+
       end
     end     
 

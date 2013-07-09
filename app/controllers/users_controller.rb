@@ -24,6 +24,7 @@ class UsersController < ApplicationController
       @user = User.new(params[:user])
       if @user.save
         flash[:success] = "Welcome to the sample application #{@user.name}"
+        UserMailer.signup_confirmation(@user).deliver
         sign_in @user
         redirect_to @user
       else
