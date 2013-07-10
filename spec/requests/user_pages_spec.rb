@@ -161,6 +161,15 @@ describe "User Pages" do
           it { should have_selector('input', value: 'Unfollow') }
         end
 
+        describe "following email confirmation" do
+          before { click_button "Follow" }
+          it "should send email to user" do
+            mail = ActionMailer::Base.deliveries.last
+            mail.to.should == [other_user.email]
+            mail.subject.should == "You have a new follower!"
+          end
+        end
+
       end
 
       describe "unfollowing a user" do

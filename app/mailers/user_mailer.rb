@@ -13,9 +13,11 @@ class UserMailer < ActionMailer::Base
     mail to: user.email, subject: "Signup confirmation"
   end
 
-  def follower_confirmation(user)
-    @greeting = "Hi"
+  def follower_confirmation(follower, user)
+    @user = user
+    @follower = follower
+    @greeting = "You have a new follower!"
 
-    mail to: user.email
+    mail to: user.email, subject: "You have a new follower!"
   end
 end
