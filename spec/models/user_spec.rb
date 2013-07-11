@@ -32,7 +32,10 @@ describe User do
   it { should respond_to(:followers) }
   it { should respond_to(:follow!) }
   it { should respond_to(:following?) }
-  it { should respond_to(:search) }
+  #done a little differently since its checking for the class method, not instance
+  it 'should respond to ::bar' do
+    User.should respond_to(:search)
+  end
   it { should_not allow_mass_assignment_of(:admin) }
 
   it { should be_valid }
