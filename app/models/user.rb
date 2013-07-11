@@ -65,6 +65,16 @@ class User < ActiveRecord::Base
   def reply_username
     "@#{username}"
   end
+
+  def self.search(search)
+    #NEED to return a scope to be able to call more methods such as paginate.
+    if search
+      where("name LIKE :search OR username LIKE :search", search: "#{search}%")
+    else
+      scoped
+    end
+  end
+
 private
 
   def create_remember_token

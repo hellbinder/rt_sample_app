@@ -59,7 +59,6 @@ describe "User Pages" do
         
         it "should send an e-mail" do
           mail = ActionMailer::Base.deliveries.last
-          puts mail
           mail.to.should == [user.email]
         end
 
@@ -232,6 +231,8 @@ describe "User Pages" do
 
   describe "index" do
     let(:user) { FactoryGirl.create(:user) }
+    
+
     before(:each) do
       sign_in user
       visit users_path
@@ -249,6 +250,41 @@ describe "User Pages" do
         User.page(1).limit(10).each do |user|
           page.should have_selector("li", text: user.name)
         end
+      end
+    end
+
+    describe "search functionality" do
+      before(:all) { 5.times { FactoryGirl.create(:user) } }
+      after (:all) { User.delete_all }
+
+      #using let! so it created the user instantly. no laziness
+      let!(:user2) { FactoryGirl.create(:user, username: "bmicahels", name: "Bob Michaels") }
+      let!(:user3) { FactoryGirl.create(:user, username: "tripob", name: "Bobitch Tripod") }
+      let!(:user4) { FactoryGirl.create(:user, username: "trinidadlav", name: "Trinidad Guslav") }
+
+      it { should have_selector("input[type=text]", id:"search") }
+
+      describe "searching for user" do
+        describe "searching by name" do
+          before do
+            fill_in "search", with: "Bob"
+            click_button "Search"
+          end
+          it { should have_selector("li", text: user2.name) } 
+          it { should have_selector("li", text: user3.name) } 
+          it { should_not have_selector("li", text: user4.name) }
+        end
+
+        describe "searching by username" do
+          before do
+            fill_in "search", with: "tri"
+            click_button "Search"
+          end
+          it { should_not have_selector("li", text: user2.name) }
+          it { should have_selector("li", text: user3.name) } 
+          it { should have_selector("li", text: user4.name) } 
+        end
+
       end
     end
 

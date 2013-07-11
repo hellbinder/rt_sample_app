@@ -5,7 +5,7 @@ class UsersController < ApplicationController
   before_filter :admin_user, only: [:destroy]
 
   def index
-    @users = User.page(params[:page] || 1).limit(10)
+    @users = User.search(params[:search]).page(params[:page] || 1).limit(10)
   end
 
   def new
