@@ -4,9 +4,14 @@ SampleApp::Application.routes.draw do
       get :following, :followers
     end
   end
-  resources :microposts,    only: [:create, :destroy]
+  resources :microposts,    only: [:create, :destroy] do
+    member do
+      get :reply
+    end
+  end
   resources :relationships, only: [:create, :destroy]
   resources :sessions,      only: [:new, :destroy, :create]
+
   root to: 'static_pages#home'
 
   match '/signup',  to: 'users#new'

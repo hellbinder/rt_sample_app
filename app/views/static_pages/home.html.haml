@@ -5,16 +5,19 @@
   $(function(){
     max_val = $('#counter').html();
     GetRemainingCharacters();
-    $('#micropost_content').live("keyup", function(){
-      GetRemainingCharacters();
+    $(document).on('keyup','.micropost_form', function(event){
+      GetRemainingCharacters(event.target);
     });
   });
-
-  function GetRemainingCharacters()
+  function GetRemainingCharacters(target)
   {
-      var current_length = $('#micropost_content').val().length;
+    if(target)
+    {
+      var current_length = $(target).val().length;
       var remaining_chars = max_val - current_length;
-      $('#counter').html(remaining_chars);
+      var $counter =  $(target).parent().find('#counter');
+     $counter.html(remaining_chars);
+    }
   }
 
 //Shows home page with different information depening on user being signed in.

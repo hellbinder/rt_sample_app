@@ -18,6 +18,14 @@ class MicropostsController < ApplicationController
     redirect_to root_url
   end
 
+  def reply
+    @micropost = Micropost.new
+    @reply_to_micropost = Micropost.find(params[:id])
+    respond_to do |format|
+      format.js
+    end
+  end
+
   private
 
   def correct_user

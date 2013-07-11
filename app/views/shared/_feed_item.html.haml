@@ -17,4 +17,5 @@
             %span.content #{link_to feed_item.user.reply_username, feed_item.user} #{reply.content}
             %span.timestamp
               Posted #{time_ago_in_words(reply.created_at)} ago.
+  #reply{id: feed_item.id}
         

@@ -47,4 +47,5 @@ group :production do
 end
 group :development do
   gem 'annotate', '2.5.0'
+  gem 'thin'
 end
