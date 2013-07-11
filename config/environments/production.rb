@@ -63,7 +63,7 @@ SampleApp::Application.configure do
   enable_starttls_auto: true  }
 
   # specify what domain to use for mailer URLs
-  config.action_mailer.default_url_options = { host: "https://young-chamber-6626.herokuapp.com" }
+  config.action_mailer.default_url_options = { host: "young-chamber-6626.herokuapp.com" }
 
   # Enable threaded mode
   # config.threadsafe!
