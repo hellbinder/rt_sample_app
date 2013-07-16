@@ -5,6 +5,14 @@
   $(function(){
     max_val = $('#counter').html();
     GetRemainingCharacters();
+
+    $("a.reply_to").on("click", function(event)
+        {
+          $("div.replyform").html("");
+          var targetId = $(event.target).parent().parent().parent().attr("id");
+          $("div#reply_" + targetId).html("Loading...");
+        });
+
     $(document).on('keyup','.micropost_form', function(event){
       GetRemainingCharacters(event.target);
     });
