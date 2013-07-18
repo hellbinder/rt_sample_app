@@ -17,7 +17,7 @@ namespace :db do
       name  = Faker::Name.name
       nameSplit = name.split()
       username = nameSplit[0][0].downcase + nameSplit[1].downcase
-      if username.length > 5
+      if username.length > 5 && User.find_by_username(username).nil?
         email = "example-#{n+1}@railstutorial.org"
         password  = "password"
         created_user = User.create!(name: name,
