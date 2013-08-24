@@ -2,8 +2,11 @@ SampleApp::Application.routes.draw do
   resources :users do
     member do
       get :following, :followers
+      get 'confirm/:confirm_key', action: 'confirm', as: 'confirm'
     end
   end
+  #match "/users/:id/key=:key", to: "users#confirm", as: "confirm_user"
+
   resources :microposts,    only: [:create, :destroy] do
     member do
       get :reply

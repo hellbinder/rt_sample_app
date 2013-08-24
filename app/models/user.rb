@@ -36,6 +36,8 @@ class User < ActiveRecord::Base
   validates_uniqueness_of :email, case_sensitive: false
   before_save { email.downcase! }
   before_save :create_remember_token
+  before_save :create_email_confirmation_hash
+
   ##NEXT COUPLE OF LINES ALSO WORK!
     #before_save :downcase_email
     #def downcase_email
@@ -81,4 +83,7 @@ private
     self.remember_token = SecureRandom.urlsafe_base64
   end
   
+  def create_email_confirmation_hash
+    self.confirmation_hash = SecureRandom.urlsafe_base64 if self.new_record?
+  end
 end

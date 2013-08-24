@@ -23,10 +23,8 @@ class UsersController < ApplicationController
     else
       @user = User.new(params[:user])
       if @user.save
-        flash[:success] = "Welcome to the sample application #{@user.name}"
         UserMailer.signup_confirmation(@user).deliver
-        sign_in @user
-        redirect_to @user
+         render text: "An email has been sent to confirm your identity. Go check it out!"
       else
         render 'new'
       end
@@ -34,6 +32,24 @@ class UsersController < ApplicationController
   end
 
   def edit
+  end
+
+  def confirm
+    user = User.find(params[:id])
+    confirm_hash = params[:confirm_key]
+    if user.active?
+      render text: "This account has already been confirmed!"
+    elsif user.confirmation_hash == confirm_hash
+      user.confirmation_hash = ""
+      user.active = true
+      user.save
+      sign_in user
+      flash[:success] = "Welcome to the sample application #{user.name}"
+      redirect_to(root_url)
+    else
+      render text: "Your confirmation key is incorrect. Please try again."
+    end
+    #redirect_to(root_url)
   end
 
   def update

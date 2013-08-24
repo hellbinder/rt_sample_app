@@ -51,19 +51,48 @@ describe "User Pages" do
         before { click_button submit }
         let (:user) { User.find_by_email('mmart@example.com') }
 
-        it { should have_selector("title", text: user.name) }
+        it { should have_content ("An email has been sent to confirm your identity. Go check it out!") }
+        
+        it "should send a confirmation e-mail" do
+          mail = ActionMailer::Base.deliveries.last
+          mail.to.should == [user.email]
+          mail.body.should have_content "verify your account"
+        end
+
+      end
+    end
+
+    describe "confirm user account" do
+      let(:user) { FactoryGirl.create :user }
+      let(:confirm_auth) { user.confirmation_hash }
+      before { user.save }
+
+      describe "user already active" do
+        before do
+          user.toggle!(:active)
+          visit confirm_user_path(user,234) # Does not care about the hash since it checks for user being active first.
+        end
+        it { should have_content "This account has already been confirmed!" }
+      end
+
+      describe "with wrong hash" do
+        before { visit confirm_user_path(user,"13512") }
+        #Redirects!
+        it { should have_content "Your confirmation key is incorrect. Please try again" }
+      end
+
+      describe "with correct hash" do
+        before { visit confirm_user_path(user, confirm_auth) }
+
+        #Make sure hes in the main page and logged in!
+        it { should have_selector("title", text: "Welcome") }
         it { should have_link("Profile", href: user_path(user)) }
         it { should have_link("Sign out", href: signout_path) }
         it { should_not have_link("Sign in", href: signin_path) }
         it { should have_success_message('Welcome') } #since when signing up should already log them in.
-        
-        it "should send an e-mail" do
-          mail = ActionMailer::Base.deliveries.last
-          mail.to.should == [user.email]
-        end
-
       end
-    end     
+
+    end
 
     describe "already logged in" do
       
@@ -76,7 +105,7 @@ describe "User Pages" do
         end
 
         specify { response.should redirect_to(root_url) }
-        #t { should have_selector('h1', text: 'Welcome') }
+        #it { should have_selector('h1', text: 'Welcome') }
       end 
 
     end

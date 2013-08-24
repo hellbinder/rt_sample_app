@@ -32,11 +32,15 @@ describe User do
   it { should respond_to(:followers) }
   it { should respond_to(:follow!) }
   it { should respond_to(:following?) }
+  it { should respond_to(:active) }
+  it { should respond_to(:confirmation_hash) }
   #done a little differently since its checking for the class method, not instance
   it 'should respond to ::bar' do
     User.should respond_to(:search)
   end
   it { should_not allow_mass_assignment_of(:admin) }
+  it { should_not allow_mass_assignment_of(:active) }
+  it { should_not allow_mass_assignment_of(:confirmation_hash) }
 
   it { should be_valid }
   it { should_not be_admin }
@@ -51,9 +55,12 @@ describe User do
     it { should be_admin } #implies (via the RSpec boolean convention) that the user should have an admin? boolean method.
   end
 
-  describe "remember token" do
+  describe "default fields" do
     before {@user.save}
     its(:remember_token) { should_not be_blank }
+    it { puts @user.active? }
+    it { should_not be_active }
+    its(:confirmation_hash) { should_not be_blank } #When creating user, it should create new hash for confirmation
   end
 
   #Password  Tests
@@ -90,22 +97,6 @@ describe User do
   describe "when password doesn't match confirmation" do
     before { @user.password_confirmation = "yomomma"}
     it { should_not be_valid }
-  end
-
-  describe "return value of authenticate method" do
-    before { @user.save }
-    let(:found_user) { User.find_by_email(@user.email) }
-
-    describe "with valid password" do
-      it { should == found_user.authenticate(@user.password) }
-    end
-
-    describe "with invalid password" do
-      let(:user_for_invalid_password) { found_user.authenticate("invalid") }
-
-      it { should_not == user_for_invalid_password }
-      specify { user_for_invalid_password.should be_false }
-    end
   end
 
   #Name Tests

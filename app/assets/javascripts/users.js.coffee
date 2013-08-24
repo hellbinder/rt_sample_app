@@ -2,6 +2,10 @@
 # All this logic will automatically be available in application.js.
 # You can use CoffeeScript in this file: http://jashkenas.github.com/coffee-script/
 
+$ -> 
+  $(document).on('a.mp_close').click (e)->
+    e.preventDefault
+    e.stopPropagation
 # $ ->
 #   a = '<form accept-charset="UTF-8" action="/microposts" class="new_micropost" id="reply_micropost" method="post"><div style="margin:0;padding:0;display:inline"><input name="utf8" type="hidden" value="✓"><input name="authenticity_token" type="hidden" value="CrLj4duoYOy22vzVL5vLACZXl0n5bthK/w9Uw7YlOrg="></div>  
 #               <div class="field">
@@ -17,4 +21,6 @@
 #     $(this).closest("li").append(a)
 #     mp_id = $(this).closest("li").attr("id")
 #     $(".hiddenReplyTo").val(mp_id)
+
+
 
