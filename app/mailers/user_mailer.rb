@@ -8,12 +8,12 @@ class UserMailer < ActionMailer::Base
   #
   def signup_confirmation(user)
     @user = user
-    @greeting = "Thank you for you interest in the site! Please verify your account by clicking on the following link."
+    @greeting = "Thank you for you interest in the site!"
 
     mail to: user.email, subject: "Signup confirmation"
   end
 
-  def signup_confirmation(user)
+  def signup_confirmed(user)
     @user = user
     @greeting = "Welcome to the site! This is a test site trying to understand the rails framework"
 

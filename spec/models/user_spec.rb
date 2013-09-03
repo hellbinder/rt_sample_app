@@ -58,7 +58,6 @@ describe User do
   describe "default fields" do
     before {@user.save}
     its(:remember_token) { should_not be_blank }
-    it { puts @user.active? }
     it { should_not be_active }
     its(:confirmation_hash) { should_not be_blank } #When creating user, it should create new hash for confirmation
   end

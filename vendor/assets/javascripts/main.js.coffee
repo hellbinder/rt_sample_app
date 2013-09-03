@@ -1,5 +1,5 @@
 $ ->
- window.setTimeout(CloseAlertDiv,4000)
+ window.setTimeout(CloseAlertDiv,8000)
 
 this.CloseAlertDiv = -> 
  $('div.alert').fadeOut('slow')

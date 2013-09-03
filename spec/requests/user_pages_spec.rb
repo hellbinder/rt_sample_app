@@ -67,29 +67,40 @@ describe "User Pages" do
       let(:confirm_auth) { user.confirmation_hash }
       before { user.save }
 
+      describe "user does not exist" do
+        before { visit confirm_user_path(999,222) }
+        it { should have_notice_message("The user has since been deleted or never existed at all!")}
+      end
+
       describe "user already active" do
         before do
-          user.toggle!(:active)
+          user.toggle!(:active) #activate user
           visit confirm_user_path(user,234) # Does not care about the hash since it checks for user being active first.
         end
-        it { should have_content "This account has already been confirmed!" }
+        #redirects with a notice
+        specify { current_path.should == "/signin"} # current_path is supposed to be defined as part of the DSL that's included "include Capybara::DSL"
+        it { should have_notice_message("This account is already confirmed! Please log in with your credentials to access the site.") }
       end
 
       describe "with wrong hash" do
         before { visit confirm_user_path(user,"13512") }
         #Redirects!
-        it { should have_content "Your confirmation key is incorrect. Please try again" }
+        specify { current_path.should == root_path } 
+        it { should have_notice_message("Your confirmation key is incorrect.") }
       end
 
       describe "with correct hash" do
         before { visit confirm_user_path(user, confirm_auth) }
 
         #Make sure hes in the main page and logged in!
-        it { should have_selector("title", text: "Welcome") }
+        it "should activate the user" do
+          user.reload
+          user.should be_active #should this be done here?! Or move it to user_specs?
+        end
         it { should have_link("Profile", href: user_path(user)) }
         it { should have_link("Sign out", href: signout_path) }
         it { should_not have_link("Sign in", href: signin_path) }
-        it { should have_success_message('Welcome') } #since when signing up should already log them in.
+        it { should have_success_message("Welcome") } #since when signing up should already log them in
       end
 
     end

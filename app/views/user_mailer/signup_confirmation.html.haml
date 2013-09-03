@@ -2,4 +2,4 @@
 
 %p Please verify your account by clicking on the following link. This is done to ensure that you are the  person trying to access the site.
 
-= link_to("Your profile", user_url(@user))
+= link_to("Click here to confirm your account", confirm_user_url(@user, @user.confirmation_hash))

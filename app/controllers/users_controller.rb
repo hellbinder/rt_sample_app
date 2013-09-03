@@ -38,18 +38,19 @@ class UsersController < ApplicationController
     user = User.find(params[:id])
     confirm_hash = params[:confirm_key]
     if user.active?
-      render text: "This account has already been confirmed!"
+      flash[:notice] = "This account is already confirmed! Please log in with your credentials to access the site."
+      redirect_to "/signin"
     elsif user.confirmation_hash == confirm_hash
       user.confirmation_hash = ""
       user.active = true
-      user.save
+      user.save(validate: false) #skip validation since its validation password which will be blank.
       sign_in user
       flash[:success] = "Welcome to the sample application #{user.name}"
       redirect_to(root_url)
     else
-      render text: "Your confirmation key is incorrect. Please try again."
+      flash[:notice] = "Your confirmation key is incorrect."
+      redirect_to(root_url)
     end
-    #redirect_to(root_url)
   end
 
   def update
