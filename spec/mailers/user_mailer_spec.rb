@@ -1,7 +1,7 @@
 require "spec_helper"
 
 describe UserMailer do
-  let(:user) { FactoryGirl.create :user }
+  let(:user) { FactoryGirl.create :non_active_user }
   describe "signup_confirmation" do
     let(:mail) { UserMailer.signup_confirmation(user) }
 
@@ -12,7 +12,7 @@ describe UserMailer do
     end
 
     it "renders the body" do
-      mail.body.encoded.should match("Welcome to the site!")
+      mail.body.encoded.should match("Thank you for you interest in the site!")
     end
   end
 

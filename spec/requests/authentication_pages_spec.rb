@@ -18,15 +18,15 @@ describe "Authentication" do
       it { should_not have_link("Settings") }
     end
     describe "with valid information" do
-      let (:user) { FactoryGirl.create(:user)}
-      before { sign_in user }
-
       describe "when account is not active" do
+        let (:user) { FactoryGirl.create(:non_active_user)}
+        before { sign_in user }
         it { should have_selector("title", text: "Sign in") }
         it { should have_error_message("The account has not been activated.")}
       end
       describe "when account is active" do
-        before { user.toggle!(:active) }
+        let (:user) { FactoryGirl.create(:user)}
+        before { sign_in user }
         it { should have_selector("title", text: user.name) }
         it { should have_link("Profile", href: user_path(user)) }
         it { should have_link("Settings", href: edit_user_path(user)) }
