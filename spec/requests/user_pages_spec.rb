@@ -15,7 +15,7 @@ describe "User Pages" do
        sign_in user
        visit new_user_path
       end
-
+      specify { current_url.should == root_url}
       it { should have_selector('h1', text: user.name) }
     end  
   end
@@ -63,7 +63,7 @@ describe "User Pages" do
     end
 
     describe "confirm user account" do
-      let(:user) { FactoryGirl.create :user }
+      let(:user) { FactoryGirl.create :non_active_user }
       let(:confirm_auth) { user.confirmation_hash }
       before { user.save }
 
