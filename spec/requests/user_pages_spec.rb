@@ -51,7 +51,7 @@ describe "User Pages" do
         before { click_button submit }
         let (:user) { User.find_by_email('mmart@example.com') }
 
-        it { should have_content ("An email has been sent to confirm your identity. Go check it out!") }
+        it { should have_success_message ("An email has been sent to confirm your identity. Go check it out!") }
         
         it "should send a confirmation e-mail" do
           mail = ActionMailer::Base.deliveries.last
@@ -67,12 +67,13 @@ describe "User Pages" do
       let(:confirm_auth) { user.confirmation_hash }
       before { user.save }
 
-      describe "user does not exist" do
+      describe "when user does not exist" do
         before { visit confirm_user_path(999,222) }
-        it { should have_notice_message("The user has since been deleted or never existed at all!")}
+        specify { current_path.should == root_path }
+        it { should have_error_message("The user does not exist or has since been deleted.")}
       end
 
-      describe "user already active" do
+      describe "when user is already active" do
         before do
           user.toggle!(:active) #activate user
           visit confirm_user_path(user,234) # Does not care about the hash since it checks for user being active first.

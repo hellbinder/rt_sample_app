@@ -9,4 +9,9 @@ class ApplicationController < ActionController::Base
     super
   end
 
+#Saw this online. Don't know if it works.
+  def not_found
+    raise ActiveRecord::RecordNotFound.new('Not Found')
+  end
+
 end

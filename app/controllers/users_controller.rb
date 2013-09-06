@@ -24,7 +24,8 @@ class UsersController < ApplicationController
       @user = User.new(params[:user])
       if @user.save
         UserMailer.signup_confirmation(@user).deliver
-         render text: "An email has been sent to confirm your identity. Go check it out!"
+         flash[:success] = "An email has been sent to confirm your identity. Go check it out!"
+         redirect_to "/signin"
       else
         render 'new'
       end
@@ -35,9 +36,13 @@ class UsersController < ApplicationController
   end
 
   def confirm
-    user = User.find(params[:id])
+    #NEED TO VALIDATE THAT USER DOES NOT EXIST (Maybe because it was deleted!? Who knows!)
+    user = User.find_by_id(params[:id])
     confirm_hash = params[:confirm_key]
-    if user.active?
+    if user.nil?
+      flash[:error] = %Q[The user does not exist or has since been deleted. Please contact <a href="http://google.com">us</a> if you believe this should not have happened!].html_safe
+      redirect_to root_url
+    elsif user.active?
       flash[:notice] = "This account is already confirmed! Please log in with your credentials to access the site."
       redirect_to "/signin"
     elsif user.confirmation_hash == confirm_hash
