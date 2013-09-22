@@ -1,0 +1,8 @@
+-provide(:title, 'Reset Password')
+%h3 Enter you email address to begin the process of resetting your password.
+.row
+  .span6.offset3
+    = form_tag password_resets_path, method: :post do
+      = label_tag :email
+      = text_field_tag :email
+      = submit_tag "Reset Password", id: "submit", class: "btn btn-primary", disable_with: "Please wait..."

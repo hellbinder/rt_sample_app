@@ -7,6 +7,8 @@ describe "Authentication" do
     before { visit signin_path }
     it { should have_selector("h1", text: "Sign in") }
     it { should have_selector("title", text: "Sign in") }
+    it { should have_link("Sign up now!", href: signup_path) }
+    it { should have_link("Click here to reset password", href: new_password_reset_path) }
   end
 
   describe "signin" do
@@ -163,5 +165,11 @@ describe "Authentication" do
 
       end
     end
+  end
+  describe "forget password" do
+    before { visit new_password_reset_path }
+    it { should have_selector("label", text: "Email")}
+    it { should have_selector("input#email") }
+    it { should have_selector("title", text: "Reset Password")}
   end
 end
