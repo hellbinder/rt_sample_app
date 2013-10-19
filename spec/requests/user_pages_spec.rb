@@ -294,6 +294,7 @@ describe "User Pages" do
       end
     end
 
+    #done by me!
     describe "search functionality" do
       before(:all) { 5.times { FactoryGirl.create(:user) } }
       after (:all) { User.delete_all }
