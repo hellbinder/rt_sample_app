@@ -77,13 +77,26 @@ class User < ActiveRecord::Base
     end
   end
 
-private
+  def send_password_reset
+    generate_token(:password_reset_hash)
+    #self.password_reset_sent_at = Time.zone.now
+    save(validate: false)
+    UserMailer.password_reset(self).deliver
+  end
 
+private
   def create_remember_token
-    self.remember_token = SecureRandom.urlsafe_base64
+    generate_token(:remember_token)
   end
   
   def create_email_confirmation_hash
-    self.confirmation_hash = SecureRandom.urlsafe_base64 if self.new_record?
+    generate_token(:confirmation_hash) if self.new_record?
   end
+
+  def generate_token(column)
+    begin
+      self[column] = SecureRandom.urlsafe_base64
+    end while User.exists?(column => self[column])
+  end
+
 end

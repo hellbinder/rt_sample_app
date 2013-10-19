@@ -1,12 +1,6 @@
 require 'spec_helper'
 
 describe PasswordResetsController do
-
-  describe "GET 'new'" do
-    it "returns http success" do
-      get 'new'
-      response.should be_success
-    end
-  end
-
+  let(:user) { FactoryGirl.create :user }
+  before { visit new_password_reset_path }
 end

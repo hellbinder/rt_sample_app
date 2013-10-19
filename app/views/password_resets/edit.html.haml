@@ -1,0 +1,11 @@
+-provide(:title, "Reset Password")
+
+%h3 Enter the desired password for your user
+.row
+  .span6.offset3
+    = form_for @user, url: password_reset_path(params[:id]) do |f|
+      = f.label :password, "Password"
+      = f.text_field :password
+      = f.label :password_confirmation, "Confirm Password"
+      = f.password_field :password_confirmation
+      = f.submit "Rest Password", disable_with: 'Please wait...' 

@@ -27,4 +27,10 @@ class UserMailer < ActionMailer::Base
 
     mail to: user.email, subject: "You have a new follower!"
   end
+
+  def password_reset(user)
+    @user = user
+    @greeting = "Information on resetting your password"
+    mail to: user.email, subject: "Reset your password"
+  end
 end
