@@ -14,7 +14,7 @@ SampleApp::Application.routes.draw do
   end
   resources :relationships, only: [:create, :destroy]
   resources :sessions,      only: [:new, :destroy, :create]
-  resources :password_resets #, only: [:new, :create, :edit]
+  resources :password_resets , only: [:new, :create, :edit, :update]
   root to: 'static_pages#home'
 
   match '/signup',  to: 'users#new'

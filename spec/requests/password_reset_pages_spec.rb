@@ -37,12 +37,24 @@ describe "Password reset pages" do
         user.password_reset_hash = SecureRandom.urlsafe_base64
         user.save!
         visit edit_password_reset_path(user.password_reset_hash) 
+         @old_encrypted_password = user.password_digest #Since password is not stored in db, I'll test with the old encrypted password
       end
       it { should have_selector("label", text: "Password")}
       it { should have_selector("label", text: "Confirm Password")}
       it { should have_selector("input#user_password") }
       it { should have_selector("input#user_password_confirmation") }
       it { should have_selector("title", text: "Reset Password")}
+      describe "fill in password and submit" do
+        before do
+          fill_in "user_password", with: "1234567"
+          fill_in "user_password_confirmation", with: "1234567"
+          click_button submit
+        end
+        it "should go to his main page logged in and password changed" do
+          user.reload.password_digest.should_not eq @old_encrypted_password
+          current_path.should eq root_path
+        end
+      end
   end
 end
 

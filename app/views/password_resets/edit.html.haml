@@ -4,8 +4,15 @@
 .row
   .span6.offset3
     = form_for @user, url: password_reset_path(params[:id]) do |f|
+      -if @user.errors.any?
+        .error_messages
+          %h2 Form is invalid
+          %ul
+          -for message in @user.errors.full_messages
+            %li{style: "color:red"}= message
+            
       = f.label :password, "Password"
       = f.text_field :password
       = f.label :password_confirmation, "Confirm Password"
       = f.password_field :password_confirmation
-      = f.submit "Rest Password", disable_with: 'Please wait...' 
+      = f.submit "Reset Password", disable_with: 'Please wait...', class: "btn btn-primary"
