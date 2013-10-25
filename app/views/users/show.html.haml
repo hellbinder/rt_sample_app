@@ -1,4 +1,5 @@
 - provide(:title, @user.name)
+- content_for :head, auto_discovery_link_tag(:atom, user_url(@user,format: "atom"))
 .row
   %aside.span4
     %section

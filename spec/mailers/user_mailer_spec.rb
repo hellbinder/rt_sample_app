@@ -32,6 +32,10 @@ describe UserMailer do
   end
 
   describe "password_reset" do
+    before do
+      user.password_reset_hash = SecureRandom.urlsafe_base64
+      user.save!
+    end
     let(:mail) { UserMailer.password_reset(user) } 
     it "renders the headers" do
       mail.subject.should eq("Reset your password")

@@ -10,7 +10,7 @@ describe "Authentication" do
     it { should have_selector("input", id: "email") }
     it { should have_selector("input", id: "password") }
     it { should have_link("Sign up now!", href: signup_path) }
-    it { should have_link("Click here to reset password", href: new_password_reset_path) }
+    it { should have_link("Click here to reset it", href: new_password_reset_path) }
   end
 
   describe "signin" do
