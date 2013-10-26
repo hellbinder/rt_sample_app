@@ -6,6 +6,7 @@
       %h1
         = gravatar_for @user
         = @user.name
+        = link_to image_tag("feed-icon-14x14.png"), user_url(@user,format: "atom")
     %section
       = render "shared/stats"
   .span8
