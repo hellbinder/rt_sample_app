@@ -5,7 +5,7 @@ SampleApp::Application.configure do
   config.cache_classes = true
 
   # Full error reports are disabled and caching is turned on
-  config.consider_all_requests_local       = false
+  config.consider_all_requests_local       = true #CHANGE TO FALSE LATER
   config.action_controller.perform_caching = true
 
   # Disable Rails's static asset server (Apache or nginx will already do this)
@@ -80,5 +80,5 @@ SampleApp::Application.configure do
   # config.active_record.auto_explain_threshold_in_seconds = 0.5
 
   ENV["REDISTOGO_URL"] = 'redis://redistogo:5968e16f1b51903c16e949f7a9dd1863@grideye.redistogo.com:10683'
-  
+
 end
