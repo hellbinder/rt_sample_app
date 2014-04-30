@@ -16,6 +16,7 @@ gem 'bootstrap-will_paginate', '0.0.6'
 gem 'figaro'
 gem 'sidekiq'
 gem 'redis'
+gem 'unicorn'
 
 group :development, :test do
   gem 'sqlite3', '1.3.5'
