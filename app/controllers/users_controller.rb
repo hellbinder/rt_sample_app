@@ -23,9 +23,9 @@ class UsersController < ApplicationController
     else
       @user = User.new(params[:user])
       if @user.save
-        UserMailer.signup_confirmation(@user).deliver
-         flash[:success] = "An email has been sent to confirm your identity. Go check it out!"
-         redirect_to "/signin"
+        UserMailer.delay.signup_confirmation(@user)
+        flash[:success] = "An email has been sent to confirm your identity. Go check it out!"
+        redirect_to "/signin"
       else
         render 'new'
       end

@@ -48,4 +48,7 @@ SampleApp::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+  
+  #redis settings
+  ENV["REDISTOGO_URL"] = 'redis://redistogo:5968e16f1b51903c16e949f7a9dd1863@grideye.redistogo.com:10683'
 end

@@ -4,8 +4,9 @@ class RelationshipsController < ApplicationController
   def create
     @user = User.find(params[:relationship][:followed_id])
     current_user.follow!(@user)
-    UserMailer.follower_confirmation(current_user, @user).deliver
     respond_with @user
+    #no worked are needed. Sidekiq suppoerts delayed mailer by default.
+    UserMailer.delay.follower_confirmation(current_user, @user)
   end
 
   def destroy

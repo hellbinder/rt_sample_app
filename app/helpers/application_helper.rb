@@ -8,4 +8,8 @@ module ApplicationHelper
       "#{base_title} | #{page_title}"
     end
   end
+
+  def process_async
+    Sidekiq::Extensions::DelayedMailer.drain
+  end
 end

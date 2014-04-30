@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'sidekiq/testing'
 
 describe "User Pages" do
   subject{ page }
@@ -54,6 +55,7 @@ describe "User Pages" do
         it { should have_success_message ("An email has been sent to confirm your identity. Go check it out!") }
         
         it "should send a confirmation e-mail" do
+          process_async
           mail = ActionMailer::Base.deliveries.last
           mail.to.should == [user.email]
           mail.body.should have_content "verify your account"
@@ -204,6 +206,7 @@ describe "User Pages" do
         describe "following email confirmation" do
           before { click_button "Follow" }
           it "should send email to user" do
+            process_async
             mail = ActionMailer::Base.deliveries.last
             mail.to.should == [other_user.email]
             mail.subject.should == "You have a new follower!"

@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'sidekiq/testing'
 
 describe "Password reset pages" do
 
@@ -25,9 +26,11 @@ describe "Password reset pages" do
         it { should have_notice_message email_reset_notice }
         it { current_path.should eq signin_path }
         it "should send a confirmation e-mail" do
+          process_async
           mail = ActionMailer::Base.deliveries.last
           mail.to.should eq([user.email])
           mail.body.should have_content "begin the process of resetting your password"
+          puts Sidekiq::Extensions::DelayedMailer.jobs.last
         end
       end
     end
