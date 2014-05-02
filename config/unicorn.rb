@@ -10,6 +10,6 @@ after_fork do |server, worker|
     config.redis = { :size => 1 }
   end
   Sidekiq.configure_server do |config|
-    config.redis = { :size => 5 }
+    config.redis = { :size => 2 }
   end
 end
