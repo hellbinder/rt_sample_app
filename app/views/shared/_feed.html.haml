@@ -1,6 +1,6 @@
 -if @feed_items.any?
   %ol.microposts
-    = render partial: "shared/feed_item", collection: @feed_items
+    = render partial: "shared/feed_item", collection: @feed_items, locals: {show_gravatar: true }
   =will_paginate @feed_items
 -else
   You are not following anyone! Find someone at the #{link_to "users", User} page!
