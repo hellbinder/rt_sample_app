@@ -1,33 +1,5 @@
 //EXCERCISE..Still trying to see best way to run js in one single page..
-//Can be added manuallly but will then blwo up in productio bc it's not a part of the asset pipeline.
-:javascript
-  var max_val;
-  $(function(){
-    max_val = $('#counter').html();
-    GetRemainingCharacters();
-
-    $("a.reply_to").on("click", function(event)
-        {
-          $("div.replyform").html("");
-          var targetId = $(event.target).parent().parent().parent().attr("id");
-          $("div#reply_" + targetId).html("Loading...");
-        });
-
-    $(document).on('keyup','.micropost_form', function(event){
-      GetRemainingCharacters(event.target);
-    });
-  });
-  function GetRemainingCharacters(target)
-  {
-    if(target)
-    {
-      var current_length = $(target).val().length;
-      var remaining_chars = max_val - current_length;
-      var $counter =  $(target).parent().find('#counter');
-     $counter.html(remaining_chars);
-    }
-  }
-
+//DONE...check the micropost_counter.js.coffee
 //Shows home page with different information depening on user being signed in.
 -if signed_in?
   = render 'static_pages/signed_in'

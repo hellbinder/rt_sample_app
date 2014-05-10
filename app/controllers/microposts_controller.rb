@@ -4,18 +4,33 @@ class MicropostsController < ApplicationController
   def create
     #adding it to the user
     @micropost = current_user.microposts.build(params[:micropost])
-    if @micropost.save
-      flash[:success] = "Post successfully created..."
-      redirect_to root_url
-    else
-      @feed_items = []
-      render "static_pages/home"
+    respond_to do |format|
+      if @micropost.save
+        format.html {  
+            flash[:success] = "Post successfully created..."
+            redirect_to root_url
+        }
+        format.js {}
+        format.json { render json: @micropost, status: :created }
+      else
+        format.html {  
+          @feed_items = []
+          render "static_pages/home"
+        }
+        format.json { render json: @micropost.errors, status: :unprocessable_entity }
+
+      end
     end
+
   end
 
   def destroy
     @micropost.destroy
-    redirect_to root_url
+    respond_to do |format|
+      format.html { redirect_to root_url }
+      format.js { render layout: false}
+      format.json { render text: "Micropost deleted" }
+    end
   end
 
   def reply

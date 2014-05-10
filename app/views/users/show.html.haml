@@ -1,30 +1,3 @@
-:javascript
-  var max_val;
-  $(function(){
-    max_val = $('#counter').html();
-    GetRemainingCharacters();
-
-    $("a.reply_to").on("click", function(event)
-        {
-          $("div.replyform").html("");
-          var targetId = $(event.target).parent().parent().parent().attr("id");
-          $("div#reply_" + targetId).html("Loading...");
-        });
-
-    $(document).on('keyup','.micropost_form', function(event){
-      GetRemainingCharacters(event.target);
-    });
-  });
-  function GetRemainingCharacters(target)
-  {
-    if(target)
-    {
-      var current_length = $(target).val().length;
-      var remaining_chars = max_val - current_length;
-      var $counter =  $(target).parent().find('#counter');
-     $counter.html(remaining_chars);
-    }
-  }
 - provide(:title, @user.name)
 - content_for :head, auto_discovery_link_tag(:atom, user_url(@user,format: "atom"))
 .row
@@ -40,7 +13,7 @@
     = render "follow_form" if signed_in?
     - if @user.microposts.any?
       %h3 Microposts (#{ @user.microposts.count })
-      #counter= Micropost.validators_on(:content)[1].options[:maximum]
+      #counter{style: "display:none"}= Micropost.validators_on(:content)[1].options[:maximum]
       %ol.microposts
         = render partial: "shared/feed_item", collection: @microposts, locals: {show_gravatar: false }
       = will_paginate @microposts

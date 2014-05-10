@@ -3,7 +3,8 @@
     .container
       = link_to "sample app", root_path, id: "logo"
       %nav
-        %ul.nav.pull-right
+        %%ul.nav.pull-right 
+          %li= "Welcome #{current_user.username}" if signed_in?
           %li= link_to "Home", root_path
           %li= link_to "Help", help_path
           - if signed_in?
